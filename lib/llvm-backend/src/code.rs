@@ -8690,7 +8690,8 @@ impl<'ctx> ModuleCodeGenerator<LLVMFunctionCodeGenerator<'ctx>, LLVMBackend, Cod
                 &cpu_name.unwrap_or(TargetMachine::get_host_cpu_name().to_string()),
                 &cpu_features.unwrap_or(TargetMachine::get_host_cpu_features().to_string()),
                 OptimizationLevel::Aggressive,
-                RelocMode::Static,
+                //OptimizationLevel::Default,
+                RelocMode::PIC,
                 CodeModel::Large,
             )
             .unwrap();
