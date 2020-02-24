@@ -41,6 +41,7 @@ fn type_to_llvm_ptr<'ctx>(intrinsics: &Intrinsics<'ctx>, ty: Type) -> PointerTyp
 }
 
 /// Struct containing LLVM and VM intrinsics.
+#[derive(Debug)]
 pub struct Intrinsics<'ctx> {
     pub ctlz_i32: FunctionValue<'ctx>,
     pub ctlz_i64: FunctionValue<'ctx>,
@@ -562,6 +563,7 @@ impl<'ctx> Intrinsics<'ctx> {
             .throw_breakpoint
             .add_attribute(AttributeLoc::Function, noreturn);
 
+        //println!("intrinsics: {:#x?}", intrinsics);
         intrinsics
     }
 }

@@ -67,6 +67,7 @@ fn generate_trampoline<'ctx>(
         ),
         _ => return Err("trampoline function unimplemented".to_string()),
     };
+    //println!("generating trampoline for  {:?} at {:x?}", trampoline_func, func_ptr);
 
     let cast_ptr_ty = |wasmer_ty| match wasmer_ty {
         Type::I32 => intrinsics.i32_ptr_ty,

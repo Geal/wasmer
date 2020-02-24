@@ -72,7 +72,16 @@ public:
 
   inline uint8_t *get_stack_map_ptr() const { return stack_map_ptr; }
   inline size_t get_stack_map_size() const { return stack_map_size; }
-  inline uint8_t *get_code_ptr() const { return (uint8_t *)code_start_ptr; }
+  inline uint8_t *get_code_ptr() const {
+    std::cout << "code start ptr " << std::hex << code_start_ptr << " code bump ptr " << std::hex << code_bump_ptr << std::endl;
+    std::cout << "eh frame ptr " << std::hex << (uint64_t)eh_frame_ptr << " eh_frame_size " << std::hex << eh_frame_size << std::endl;
+    std::cout << "code section base " << std::hex << (uint64_t) code_section.base << " code section_size " << std::hex << code_section.size << std::endl;
+    std::cout << "read section base " << std::hex << (uint64_t)read_section.base << " read section_size " << std::hex << read_section.size << std::endl;
+    std::cout << "readwrite section base " << std::hex << (uint64_t)readwrite_section.base << " readwrite section_size " << std::hex << readwrite_section.size
+      << " offset" << std::hex << (uint64_t) readwrite_section.base - (uint64_t) code_section.base
+      << std::endl;
+    return (uint8_t *)code_start_ptr;
+  }
   inline size_t get_code_size() const { return code_size; }
   inline uint8_t *get_readwrite_section_ptr() const { return readwrite_section.base; }
   inline size_t get_readwrite_section_size() const { return readwrite_section.size; }

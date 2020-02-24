@@ -119,8 +119,10 @@ fn get_callbacks() -> Callbacks {
         ptr_out: &mut *mut u8,
         size_out: &mut usize,
     ) -> LLVMResult {
+        println!("LLVM ALLOCATE MEMORY: ptr {:x?} size {:x?}", ptr_out, size_out);
         unsafe { crate::platform::alloc_memory(size, protect, ptr_out, size_out) }
     }
+    println!("alloc_memory address: {:x?}", alloc_memory as *const u8);
 
     extern "C" fn protect_memory(ptr: *mut u8, size: usize, protect: MemProtect) -> LLVMResult {
         unsafe { crate::platform::protect_memory(ptr, size, protect) }
@@ -147,6 +149,8 @@ fn get_callbacks() -> Callbacks {
 
         let name_slice = unsafe { slice::from_raw_parts(name_ptr as *const u8, length) };
         let name = str::from_utf8(name_slice).unwrap();
+        println!("throw_trap: {:x?}", throw_trap as *mut u8);
+        println!("throw_breakpoint: {:x?}", throw_breakpoint as *mut u8);
 
         match name {
             fn_name!("vm.memory.grow.dynamic.local") => vmcalls::local_dynamic_memory_grow as _,
@@ -239,6 +243,7 @@ impl LLVMBackend {
             )
         };
 
+        println!("LLVMBackend memory buffer ptr {:x?}, len {:x?}", mem_buf_slice.as_ptr(), mem_buf_slice.len());
         if res != LLVMResult::OK {
             panic!("failed to load object")
         }
@@ -255,6 +260,15 @@ impl LLVMBackend {
 
             let stackmaps = _stackmaps;
             let module_info = _module_info;
+
+            unsafe {
+              println!("LLVMBackend stackmap ptr {:x?}, len {:x?}",
+                llvm_backend_get_stack_map_ptr(module),
+                llvm_backend_get_stack_map_size(module));
+              println!("LLVMBackend code ptr {:x?}, len {:x?}",
+                llvm_backend_get_code_ptr(module),
+                llvm_backend_get_code_size(module));
+            }
 
             let raw_stackmap = unsafe {
                 std::slice::from_raw_parts(

@@ -8513,11 +8513,14 @@ impl<'ctx> FunctionCodeGenerator<CodegenError> for LLVMFunctionCodeGenerator<'ct
                     }
                 };
 
+                println!("generating memory grow with func_value: {:?}", func_value);
+
                 let memory_index_const = intrinsics
                     .i32_ty
                     .const_int(reserved as u64, false)
                     .as_basic_value_enum();
                 let delta = state.pop1()?;
+                println!("delta: {:?}", delta);
 
                 let result = builder.build_call(
                     func_value,
@@ -8546,6 +8549,7 @@ impl<'ctx> FunctionCodeGenerator<CodegenError> for LLVMFunctionCodeGenerator<'ct
                         }
                     }
                 };
+                println!("generating memory size with func_value: {:?}", func_value);
 
                 let memory_index_const = intrinsics
                     .i32_ty

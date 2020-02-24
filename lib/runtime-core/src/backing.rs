@@ -430,6 +430,8 @@ impl LocalBacking {
             }
         }
 
+        println!("finalized tables: {:x?}", tables);
+
         Ok(tables
             .iter_mut()
             .map(|(_, table)| table.vm_local_table())
