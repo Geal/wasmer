@@ -592,7 +592,7 @@ impl FuncCtx {
 #[repr(C)]
 pub struct ImportedFunc {
     /// Pointer to the function itself.
-    pub(crate) func: *const Func,
+    pub func: *const Func,
 
     /// Mutable non-null pointer to [`FuncCtx`].
     pub(crate) func_ctx: NonNull<FuncCtx>,
