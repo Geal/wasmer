@@ -8688,11 +8688,19 @@ impl<'ctx> ModuleCodeGenerator<LLVMFunctionCodeGenerator<'ctx>, LLVMBackend, Cod
         }
 
         let target = Target::from_triple(&triple).unwrap();
+        println!("generated target: {:?}", target);
+        println!("triple: {:?}", triple);
+        println!("cpu name: {:?}", &cpu_name.as_ref().unwrap_or(&TargetMachine::get_host_cpu_name().to_string()));
+        println!("current cpu features: {:?}", &cpu_features.as_ref().unwrap_or(&TargetMachine::get_host_cpu_features().to_string()));
+
+        let features = "+sse2,+cx16,+sahf,-tbm,-avx512ifma,-sha,-gfni,-fma4,-vpclmulqdq,+prfchw,+bmi2,-cldemote,+fsgsbase,-ptwrite,+xsavec,+popcnt,+mpx,+aes,-avx512bitalg,-movdiri,+xsaves,-avx512er,-avx512vnni,-avx512vpopcntdq,-pconfig,-clwb,-avx512f,-clzero,-pku,+mmx,-lwp,-rdpid,-xop,+rdseed,-waitpkg,-movdir64b,-sse4a,-avx512bw,+clflushopt,+xsave,-avx512vbmi2,+64bit,-avx512vl,+invpcid,-avx512cd,-avx,-vaes,+cx8,+fma,-rtm,+bmi,-enqcmd,+rdrnd,-mwaitx,+sse4.1,+sse4.2,-avx2,+fxsr,-wbnoinvd,+sse,+lzcnt,+pclmul,-prefetchwt1,+f16c,+ssse3,+sgx,-shstk,+cmov,-avx512vbmi,-avx512bf16,+movbe,+xsaveopt,-avx512dq,+adx,-avx512pf,+sse3";
+        println!("chosen cpu features: {:?}", features);
         let target_machine = target
             .create_target_machine(
                 &triple,
                 &cpu_name.unwrap_or(TargetMachine::get_host_cpu_name().to_string()),
-                &cpu_features.unwrap_or(TargetMachine::get_host_cpu_features().to_string()),
+                //&cpu_features.unwrap_or(TargetMachine::get_host_cpu_features().to_string()),
+                &features,
                 OptimizationLevel::Aggressive,
                 //OptimizationLevel::Default,
                 RelocMode::PIC,
